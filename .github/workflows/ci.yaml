@@ -1,0 +1,74 @@
+name: 'CI'
+
+on:
+  push:
+    paths:
+      - src/**
+      - .github/workflows/ci.yaml
+    branches:
+      - main
+  pull_request:
+    paths:
+      - src/**
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: 2frogsstudio/fpv-ladder-bot
+  ARCHITECTURES: x64,arm64
+jobs:
+  build:
+    name: Build, Tests, Publish
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: src/global.json
+          cache: true
+          cache-dependency-path: src/Directory.Packages.props
+      
+      - name: Run tests
+        timeout-minutes: 10
+        working-directory: src
+        run: |
+          dotnet test -c Release --logger "console;verbosity=normal" --logger "trx;LogFilePrefix=results" -m
+
+      - name: Upload test results trx files
+        uses: actions/upload-artifact@v7
+        if: success() || failure()
+        with:
+          name: test-results
+          path: '**/*.trx'
+
+      - uses: docker/login-action@v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build, publish image and push manifest
+        if: github.event_name != 'pull_request'
+        working-directory: src
+        run: |
+          archImages=""
+          for arch in $(echo $ARCHITECTURES | sed "s/,/ /g"); do
+            tag=${{ github.sha }}-$arch
+            dotnet publish FpvLadderBot --os linux --arch $arch /t:PublishContainer /p:ContainerRepository="$IMAGE_NAME" /p:ContainerImageTags="$tag"
+          
+            remoteImage=$REGISTRY/$IMAGE_NAME:$tag
+            docker tag $IMAGE_NAME:$tag $remoteImage
+            docker push $remoteImage
+          
+            archImages+=" ${remoteImage}"
+          done
+          docker manifest create $REGISTRY/$IMAGE_NAME:${{ github.sha }} $archImages
+          docker manifest push $REGISTRY/$IMAGE_NAME:${{ github.sha }}  
+          docker manifest create $REGISTRY/$IMAGE_NAME:latest $archImages
+          docker manifest push $REGISTRY/$IMAGE_NAME:latest

@@ -1,0 +1,11 @@
+services:
+  app:
+    image: ${IMAGE:-ghcr.io/2frogsstudio/fpv-ladder-bot}:${TAG:-latest}
+    env_file: .env
+    volumes:
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+      - ./logs:/app/logs
+    restart: no
+
+volumes:
+  Data:
