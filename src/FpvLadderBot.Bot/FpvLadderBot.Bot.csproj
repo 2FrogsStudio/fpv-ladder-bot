@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="MassTransit.Abstractions" />
+		<PackageReference Include="MassTransit.Quartz" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.Extensions.Http" />
+		<PackageReference Include="Telegram.Bot" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FpvLadderBot.Abstract\FpvLadderBot.Abstract.csproj" />
+		<ProjectReference Include="..\FpvLadderBot.Constants\FpvLadderBot.Constants.csproj" />
+		<ProjectReference Include="..\FpvLadderBot.Database.Models\FpvLadderBot.Database.Models.csproj" />
+		<ProjectReference Include="..\FpvLadderBot.FpvLadderClient\FpvLadderBot.FpvLadderClient.csproj" />
+		<ProjectReference Include="..\FpvLadderBot.Utils\FpvLadderBot.Utils.csproj" />
+	</ItemGroup>
+
+</Project>

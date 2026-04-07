@@ -1,0 +1,21 @@
+namespace FpvLadderBot.BackNavigations;
+
+public class GetBackNavigationListConsumer(AppDbContext db) : IMediatorConsumer<GetBackNavigationList> {
+    public async Task Consume(ConsumeContext<GetBackNavigationList> context) {
+        GetBackNavigationList query = context.Message;
+        CancellationToken cancellationToken = context.CancellationToken;
+
+        BackNavigationEntity? entity =
+            await db.BackNavigations.FindAsync([query.UserId, query.ChatId], cancellationToken);
+
+        if (string.IsNullOrEmpty(entity?.Data)
+            || JsonSerializer.Deserialize<List<BackNavigation>>(entity.Data) is not { } list) {
+            await context.RespondAsync(new EmptyNavigation());
+            return;
+        }
+
+        GetBackNavigationResult[] result = list.Select(n => new GetBackNavigationResult(n.Name, n.Guid)).Reverse()
+            .ToArray();
+        await context.RespondAsync(result);
+    }
+}
