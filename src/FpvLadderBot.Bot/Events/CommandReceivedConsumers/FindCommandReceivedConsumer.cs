@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace FpvLadderBot.Events.CommandReceivedConsumers;
 
 public class FindCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMediator mediator)
@@ -77,24 +75,13 @@ public class FindCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMe
                 });
             }
 
-            string[] split = pilot.PilotId.Split(':');
-            string linkId = split[0].Replace('_', '/');
-            string linkClass = split[1];
-            string link = new StringBuilder(Constants.FpvLadderUrl)
-                .Append("pilot/")
-                .Append(linkId)
-                .Append(".html")
-                .Append('#')
-                .Append(linkClass)
-                .ToString();
-
             Text =
                 $"{pilot.Fio}".ToEscapedMarkdownV2() + "\n" +
                 $"Рейтинг: {pilot.Rating}".ToEscapedMarkdownV2() + "\n" +
                 $"Позиция: {pilot.Position}".ToEscapedMarkdownV2() + "\n" +
                 $"Подписчиков в боте: {pilot.Subscribers}".ToEscapedMarkdownV2() + "\n" +
                 $"Обновлено: {pilot.Updated:dd.MM.yyyy H:mm} (МСК)".ToEscapedMarkdownV2() + "\n" +
-                link.ToEscapedMarkdownV2();
+                PilotLinkFormatter.FormatPilotLink(pilot.PilotId);
             InlineKeyboard = buttons.Split(1);
             return;
         }

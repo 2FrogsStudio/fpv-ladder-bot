@@ -11,9 +11,9 @@ public class FpvLadderClient(HttpClient httpClient, IMemoryCache memoryCache) : 
             Stream indexYamlStream = await httpClient.GetStreamAsync("index.yaml", cancellationToken);
             var parser = new Parser(new StreamReader(indexYamlStream));
             IDeserializer deserializer = new DeserializerBuilder().Build();
-            parser.Expect<StreamStart>();
+            parser.Consume<StreamStart>();
             var piliInfos = new List<PilotIndexModel>();
-            while (parser.Accept<DocumentStart>()) {
+            while (parser.Accept<DocumentStart>(out DocumentStart? _)) {
                 var pilotInfo = deserializer.Deserialize<PilotIndexModel>(parser);
                 pilotInfo.Class = pilotInfo.Class.Replace("drone-racing > ", string.Empty);
                 piliInfos.Add(pilotInfo);

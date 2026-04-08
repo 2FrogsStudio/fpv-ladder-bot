@@ -74,7 +74,7 @@ public class NotifySubscribersPilotRatingChangedConsumer(
             $"Позиция: {positionDelta}".ToEscapedMarkdownV2() + '\n' +
             $"Подписчиков: {pilot.Subscribers}".ToEscapedMarkdownV2() + "\n" +
             $"Обновлено: {pilot.Updated:dd.MM.yyyy H:mm} (МСК)".ToEscapedMarkdownV2() + "\n" +
-            $"{Constants.FpvLadderUrl}{pilot.PilotId}".ToEscapedMarkdownV2();
+            PilotLinkFormatter.FormatPilotLink(pilot.PilotId);
 
         var buttons = new List<InlineKeyboardButton>();
 
