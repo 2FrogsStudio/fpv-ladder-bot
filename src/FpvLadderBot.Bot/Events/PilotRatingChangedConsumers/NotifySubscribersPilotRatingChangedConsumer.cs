@@ -69,7 +69,7 @@ public class NotifySubscribersPilotRatingChangedConsumer(
 
         string text =
             $"{(isIncreased ? "🚀" : "🔻")} Рейтинг обновлен ".ToEscapedMarkdownV2() + '\n' +
-            $"{pilot.Fio}".ToEscapedMarkdownV2() + "\n" +
+            $"{pilot.Name}".ToEscapedMarkdownV2() + "\n" +
             $"Рейтинг: {ratingDelta}".ToEscapedMarkdownV2() + '\n' +
             $"Позиция: {positionDelta}".ToEscapedMarkdownV2() + '\n' +
             $"Подписчиков: {pilot.Subscribers}".ToEscapedMarkdownV2() + "\n" +

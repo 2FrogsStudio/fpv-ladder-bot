@@ -15,7 +15,7 @@ public enum Command {
         Text = "/find",
         InlineName = "🔎 Поиск",
         Pipeline = Pipeline.Find,
-        Description = "Найти игрока по ФИО или ссылке на r.ttw.ru"
+        Description = "Найти пилота по имени"
     )]
     [CommandArg("[Запрос]",
         "Имя для поиска")]

@@ -1,17 +1,11 @@
 namespace FpvLadderBot.Queries;
 
-public class GetPilotConsumer : IMediatorConsumer<GetPilot> {
-    private readonly AppDbContext _db;
-
-    public GetPilotConsumer(AppDbContext db) {
-        _db = db;
-    }
-
+public class GetPilotConsumer(AppDbContext db) : IMediatorConsumer<GetPilot> {
     public async Task Consume(ConsumeContext<GetPilot> context) {
         CancellationToken cancellationToken = context.CancellationToken;
         string pilotId = context.Message.PilotId;
 
-        PilotEntity? entity = await _db.Pilots.FindAsync([pilotId], cancellationToken);
+        PilotEntity? entity = await db.Pilots.FindAsync([pilotId], cancellationToken);
 
         if (entity is null) {
             await context.RespondAsync(new GetPilotNotFoundResult());
@@ -19,7 +13,7 @@ public class GetPilotConsumer : IMediatorConsumer<GetPilot> {
         }
 
         int subscribers =
-            await _db.Subscriptions.CountAsync(s => s.PilotId == pilotId, cancellationToken);
+            await db.Subscriptions.CountAsync(s => s.PilotId == pilotId, cancellationToken);
 
         await context.RespondAsync(new GetPilotResult(
             entity.PilotId,

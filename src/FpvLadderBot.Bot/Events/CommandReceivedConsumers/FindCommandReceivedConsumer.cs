@@ -76,7 +76,7 @@ public class FindCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMe
             }
 
             Text =
-                $"{pilot.Fio}".ToEscapedMarkdownV2() + "\n" +
+                $"{pilot.Name}".ToEscapedMarkdownV2() + "\n" +
                 $"Рейтинг: {pilot.Rating}".ToEscapedMarkdownV2() + "\n" +
                 $"Позиция: {pilot.Position}".ToEscapedMarkdownV2() + "\n" +
                 $"Подписчиков в боте: {pilot.Subscribers}".ToEscapedMarkdownV2() + "\n" +

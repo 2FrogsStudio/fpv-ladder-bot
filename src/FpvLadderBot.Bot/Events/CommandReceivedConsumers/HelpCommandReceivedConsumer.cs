@@ -5,7 +5,7 @@ public class HelpCommandReceivedConsumer(
     IScopedMediator mediator) : CommandReceivedConsumerBase(Command.Help, botClient, mediator) {
     protected override Task ConsumeAndGetReply(long userId, long chatId, int? replyToMessageId, string[] args,
         bool isBotAdmin, CancellationToken cancellationToken) {
-        string text = "Usage:\n" +
+        string text = "Команды:\n" +
                       string.Join('\n', CommandHelpers.CommandAttributeByCommand
                           .Select(c => c.Value)
                           .Where(c => c is not null && (!c.IsAdminCommand || isBotAdmin))

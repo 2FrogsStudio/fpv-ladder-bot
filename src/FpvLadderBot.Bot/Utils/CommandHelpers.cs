@@ -29,7 +29,6 @@ public static class CommandHelpers {
             IEnumerable<string> args = argAttrs
                 .Select(a => $"   {a.Name} - {a.Description}");
             string help = description + '\n' +
-                          "Usages:\n" +
                           string.Join('\n', usages) + "\n\n" +
                           string.Join('\n', args);
             return help.ToEscapedMarkdownV2();
