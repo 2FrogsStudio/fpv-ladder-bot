@@ -77,12 +77,17 @@ public class FindCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMe
                 });
             }
 
+            string[] split = pilot.PilotId.Split(':');
+            string linkId = split[0].Replace('_', '/');
+            string linkClass = split[1];
             string link = new StringBuilder(Constants.FpvLadderUrl)
                 .Append("pilot/")
-                .Append(pilot.PilotId.Split(':')[0].Replace('_','/'))
+                .Append(linkId)
                 .Append(".html")
+                .Append('#')
+                .Append(linkClass)
                 .ToString();
-            
+
             Text =
                 $"{pilot.Fio}".ToEscapedMarkdownV2() + "\n" +
                 $"Рейтинг: {pilot.Rating}".ToEscapedMarkdownV2() + "\n" +
@@ -94,12 +99,11 @@ public class FindCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMe
             return;
         }
 
-        if (result.Is<GetPilotNotFoundResult>(out _)) {
-            Text = $"Пилот с идентификатором {pilotId} не найден".ToEscapedMarkdownV2();
-            return;
+        if (!result.Is<GetPilotNotFoundResult>(out _)) {
+            throw new UnreachableException();
         }
 
-        throw new UnreachableException();
+        Text = $"Пилот с идентификатором {pilotId} не найден".ToEscapedMarkdownV2();
     }
 
     private async Task<(string Name, string PilotId)[]> SearchPilots(string search,
@@ -108,26 +112,5 @@ public class FindCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMe
             .CreateRequestClient<SearchPilots>()
             .GetResponse<SearchPilotsResult>(new SearchPilots(search), cancellationToken);
         return response.Message.Pilots;
-    }
-
-    private static bool TryGetPilotId(string url, out string? pilotId) {
-        var baseUri = new Uri(Constants.FpvLadderUrl);
-        if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri)
-            || string.IsNullOrWhiteSpace(uri.Host)) {
-            uri = new Uri(baseUri, url);
-        }
-
-        if (uri.Host == baseUri.Host
-            && uri is { AbsolutePath: "/pilots/" }) {
-            pilotId = HttpUtility.ParseQueryString(uri.Query).Get("id");
-            if (!string.IsNullOrWhiteSpace(pilotId)) {
-                pilotId = uri.PathAndQuery;
-                return true;
-            }
-        }
-
-        pilotId = null;
-        pilotId = null;
-        return false;
     }
 }
