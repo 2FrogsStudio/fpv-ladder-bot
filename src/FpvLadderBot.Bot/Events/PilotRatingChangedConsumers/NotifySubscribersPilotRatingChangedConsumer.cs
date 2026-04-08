@@ -53,8 +53,8 @@ public class NotifySubscribersPilotRatingChangedConsumer(
 
         string ratingDelta =
             isIncreased
-                ? $"{changed.OldRating:F2} + {pilot.Rating - changed.OldRating:F2} → {pilot.Rating:F2}"
-                : $"{changed.OldRating:F2} - {changed.OldRating - pilot.Rating:F2} → {pilot.Rating:F2}";
+                ? $"{changed.OldRating} + {pilot.Rating - changed.OldRating} → {pilot.Rating}"
+                : $"{changed.OldRating} - {changed.OldRating - pilot.Rating} → {pilot.Rating}";
 
         string positionDelta =
             pilot.Position >= changed.OldPosition
