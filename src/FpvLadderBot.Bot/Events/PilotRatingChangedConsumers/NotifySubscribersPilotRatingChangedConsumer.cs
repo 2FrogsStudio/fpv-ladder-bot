@@ -72,7 +72,7 @@ public class NotifySubscribersPilotRatingChangedConsumer(
             $"{pilot.Name}".ToEscapedMarkdownV2() + "\n" +
             $"Рейтинг: {ratingDelta}".ToEscapedMarkdownV2() + '\n' +
             $"Позиция: {positionDelta}".ToEscapedMarkdownV2() + '\n' +
-            $"Подписчиков: {pilot.Subscribers}".ToEscapedMarkdownV2() + "\n" +
+            $"Подписчиков в боте: {pilot.Subscribers}".ToEscapedMarkdownV2() + "\n" +
             $"Обновлено: {pilot.Updated:dd.MM.yyyy H:mm} (МСК)".ToEscapedMarkdownV2() + "\n" +
             PilotLinkFormatter.FormatPilotLink(pilot.PilotId);
 
