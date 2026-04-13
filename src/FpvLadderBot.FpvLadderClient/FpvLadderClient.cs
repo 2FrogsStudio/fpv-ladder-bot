@@ -8,7 +8,7 @@ namespace FpvLadderBot;
 public class FpvLadderClient(HttpClient httpClient, IMemoryCache memoryCache) : IFpvLadderClient {
     private async Task<PilotRating[]> GetPilotRatings(CancellationToken cancellationToken) {
         return await memoryCache.GetOrCreateAsync<PilotRating[]>("PilotsIndex", async _ => {
-            Stream indexYamlStream = await httpClient.GetStreamAsync("index.yaml", cancellationToken);
+            Stream indexYamlStream = await httpClient.GetStreamAsync($"index.yaml?v={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}", cancellationToken);
             var parser = new Parser(new StreamReader(indexYamlStream));
             IDeserializer deserializer = new DeserializerBuilder().Build();
             parser.Consume<StreamStart>();
