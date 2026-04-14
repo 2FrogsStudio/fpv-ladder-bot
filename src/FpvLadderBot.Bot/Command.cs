@@ -7,7 +7,7 @@ public enum Command {
 
     [Command(
         Text = "/start",
-        Description = "Главное меню"
+        Description = "Мои подписки"
     )]
     Start,
 

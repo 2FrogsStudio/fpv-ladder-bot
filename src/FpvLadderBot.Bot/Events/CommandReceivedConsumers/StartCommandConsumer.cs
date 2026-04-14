@@ -29,7 +29,7 @@ public class StartCommandConsumer(ITelegramBotClient botClient, IScopedMediator 
                 CallbackData = JsonSerializer.Serialize(new NavigationData.CommandData(Command.Find, s.PilotId))
             }).Split(1).ToArray();
 
-        Text = "Главное меню";
+        Text = pilotButtonRows.Length>0 ? "Мои подписки" : "Пока нет подписок";
         InlineKeyboard = pilotButtonRows.Union(commandMenuRows);
         await _mediator.Send(new ResetBackNavigation(userId, chatId), cancellationToken);
     }
