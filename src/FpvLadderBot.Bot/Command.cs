@@ -27,6 +27,12 @@ public enum Command {
         IsAdminCommand = true)]
     Update,
 
+    [Command(Text = "/stat",
+        Description = "Статистика бота",
+        IsInitCommand = false,
+        IsAdminCommand = true)]
+    Stat,
+
     [Command(Text = "/reschedule_job",
         Description = "Обновление джобы",
         IsInitCommand = false,
