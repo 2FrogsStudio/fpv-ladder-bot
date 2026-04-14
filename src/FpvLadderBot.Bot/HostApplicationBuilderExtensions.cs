@@ -1,4 +1,5 @@
-﻿using FpvLadderBot.Services;
+﻿using System.Net;
+using FpvLadderBot.Services;
 
 namespace FpvLadderBot;
 
@@ -12,6 +13,10 @@ public static class HostApplicationBuilderExtensions {
 
         builder.Services.AddMemoryCache();
         builder.Services.AddHttpClient("TelegramBotClient")
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler {
+                Proxy = builder.Environment.IsDevelopment() ? new WebProxy("socks5://localhost:7070") : null,
+                UseProxy = builder.Environment.IsDevelopment()
+            })
             .AddTypedClient<ITelegramBotClient>(client => new TelegramBotClient(botToken, client));
         builder.Services.AddHostedService<BotInit>()
             .AddHostedService<PullingService>()
