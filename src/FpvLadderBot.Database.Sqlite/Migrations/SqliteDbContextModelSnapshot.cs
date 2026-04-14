@@ -93,6 +93,12 @@ namespace FpvLadderBot.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("Updated")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ChatId", "PilotId");
 
                     b.HasIndex("PilotId");
