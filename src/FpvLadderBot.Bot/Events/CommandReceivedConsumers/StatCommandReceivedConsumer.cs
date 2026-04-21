@@ -1,13 +1,13 @@
 namespace FpvLadderBot.Events.CommandReceivedConsumers;
 
-public class StatCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMediator mediator, IBus bus)
+public class StatCommandReceivedConsumer(ITelegramBotClient botClient, IScopedMediator mediator)
     : CommandReceivedConsumerBase(Command.Stat, botClient, mediator) {
-    private readonly ITelegramBotClient _botClient = botClient;
-
+    private readonly IScopedMediator _mediator = mediator;
+    
     protected override async Task ConsumeAndGetReply(long userId, long chatId, int? replyToMessageId, string[] args,
         bool isBotAdmin,
         CancellationToken cancellationToken) {
-        Response<GetStatisticsResult> statistics = await mediator
+        Response<GetStatisticsResult> statistics = await _mediator
             .CreateRequestClient<GetStatistics>()
             .GetResponse<GetStatisticsResult>(new GetStatistics(), cancellationToken);
 

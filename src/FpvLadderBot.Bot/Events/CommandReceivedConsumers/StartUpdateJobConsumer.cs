@@ -4,7 +4,6 @@ namespace FpvLadderBot.Events.CommandReceivedConsumers;
 
 public class StartUpdateJobConsumer(ITelegramBotClient botClient, IScopedMediator mediator, IBus bus)
     : CommandReceivedConsumerBase(Command.Update, botClient, mediator) {
-    private readonly ITelegramBotClient _botClient = botClient;
 
     protected override async Task ConsumeAndGetReply(long userId, long chatId, int? replyToMessageId, string[] args,
         bool isBotAdmin,

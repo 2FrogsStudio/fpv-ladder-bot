@@ -8,6 +8,8 @@ public abstract class CommandReceivedConsumerBase(
     protected string? Text { get; set; }
     protected IEnumerable<IEnumerable<InlineKeyboardButton>>? InlineKeyboard { get; set; }
 
+    protected ITelegramBotClient _botClient = bot;
+    
     public async Task Consume(ConsumeContext<CommandReceived> context) {
         if (context.Message.Command != command) {
             return;
@@ -49,7 +51,7 @@ public abstract class CommandReceivedConsumerBase(
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (menuMessageId.HasValue) {
-            await bot.EditMessageText(
+            await _botClient.EditMessageText(
                 chatId,
                 menuMessageId.Value,
                 Text,
@@ -58,7 +60,7 @@ public abstract class CommandReceivedConsumerBase(
                 cancellationToken: cancellationToken
             );
         } else {
-            await bot.SendMessage(
+            await _botClient.SendMessage(
                 chatId,
                 Text,
                 ParseMode.MarkdownV2,
