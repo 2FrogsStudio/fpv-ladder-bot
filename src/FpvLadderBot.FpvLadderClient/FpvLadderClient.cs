@@ -34,7 +34,7 @@ public class FpvLadderClient(HttpClient httpClient, IMemoryCache memoryCache) : 
             }
             return list.ToArray();
         }, new MemoryCacheEntryOptions {
-            SlidingExpiration = TimeSpan.FromTicks(5),
+            SlidingExpiration = TimeSpan.FromMinutes(1),
             Size = 1
         }) ?? throw new InvalidOperationException();
     }
